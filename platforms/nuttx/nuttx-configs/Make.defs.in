@@ -64,8 +64,10 @@ CFLAGS = -Os -g2 -I${PX4_SOURCE_DIR}/src/include ${CMAKE_C_FLAGS} -I. -isystem $
 CXXFLAGS = -Os -g2 -I${PX4_SOURCE_DIR}/src/include ${CMAKE_CXX_FLAGS} -I. -isystem $(TOPDIR)/include -isystem $(TOPDIR)/include/cxx \
 	-fcheck-new \
 	-fno-builtin \
+	-Wno-c++14-compat \
 	-Wno-double-promotion \
 	-Wno-maybe-uninitialized \
-	-Wno-missing-declarations
+	-Wno-missing-declarations \
+	-D__NuttX__ -D_LIBCPP_BUILD_STATIC -D_LIBCPP_NO_EXCEPTIONS -DCLOCK_MONOTONIC
 
 AFLAGS = $(CFLAGS) -D__ASSEMBLY__
