@@ -33,26 +33,50 @@
 
 px4_add_git_submodule(TARGET git_uavcan PATH "libuavcan")
 
-set(UAVCAN_USE_CPP03 ON CACHE BOOL "uavcan cpp03")
-set(UAVCAN_PLATFORM stm32 CACHE STRING "uavcan platform")
+include(ExternalProject)
 
-if(NOT config_uavcan_num_ifaces)
-	message(FATAL_ERROR "config_uavcan_num_ifaces not set")
+if ("${OS}" MATCHES "nuttx")
+
+	if(NOT config_uavcan_num_ifaces)
+		message(FATAL_ERROR "config_uavcan_num_ifaces not set")
+	endif()
+
+	set(LIBUAVCAN_CMAKE_CXX_FLAGS "-DUAVCAN_CPP_VERSION=UAVCAN_CPP03 -DUAVCAN_STM32_NUTTX -DUAVCAN_STM32_NUM_IFACES=${config_uavcan_num_ifaces} -DUAVCAN_STM32_TIMER_NUMBER=5 -fno-exceptions -fno-rtti")
+	add_definitions(-DUAVCAN_CPP_VERSION=UAVCAN_CPP03 -DUAVCAN_STM32_NUTTX -DUAVCAN_STM32_NUM_IFACES=${config_uavcan_num_ifaces} -DUAVCAN_STM32_TIMER_NUMBER=5)
+
+	set(LIBUAVCAN_CMAKE_INCLUDES "-isystem${PX4_BINARY_DIR}/NuttX/nuttx/arch/arm/src/common -isystem${PX4_BINARY_DIR}/NuttX/nuttx/arch/arm/src/chip -isystem${PX4_BINARY_DIR}/NuttX/nuttx/include -isystem${PX4_BINARY_DIR}/NuttX/nuttx/include -isystem${PX4_BINARY_DIR}/NuttX/nuttx/include/cxx -isystem${PX4_BINARY_DIR}/NuttX/apps/include")
+
+	set(LIBUAVCAN_CMAKE_FLAGS "${LIBUAVCAN_CMAKE_CXX_FLAGS} ${LIBUAVCAN_CMAKE_INCLUDES}")
+
+	ExternalProject_Add(
+		libuavcan
+		SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libuavcan
+		GIT_SUBMODULES ${CMAKE_CURRENT_SOURCE_DIR}/libuavcan
+		CMAKE_GENERATOR ${CMAKE_GENERATOR}
+		CMAKE_ARGS
+			-DUAVCAN_PLATFORM=stm32
+			-DUAVCAN_USE_CPP03=1
+			-DCMAKE_SYSTEM_PROCESSOR=${CMAKE_SYSTEM_PROCESSOR}
+			-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+			-DCMAKE_CXX_FLAGS=${LIBUAVCAN_CMAKE_FLAGS}
+			-DCMAKE_INSTALL_PREFIX=${PX4_BINARY_DIR}/libuavcan
+		DEPENDS
+			prebuild_targets
+		#LOG_BUILD 1
+		USES_TERMINAL_BUILD 1
+	)
+
+	add_library(uavcan STATIC IMPORTED)
+	set_target_properties(uavcan PROPERTIES IMPORTED_LOCATION ${PX4_BINARY_DIR}/libuavcan/lib/libuavcan.a)
+	
+	add_library(uavcan_stm32_driver STATIC IMPORTED)
+	set_target_properties(uavcan_stm32_driver PROPERTIES IMPORTED_LOCATION ${PX4_BINARY_DIR}/libuavcan/lib/libuavcan_stm32_driver.a)
+
+else()
+	set(UAVCAN_PLATFORM linux CACHE STRING "uavcan platform")
 endif()
 
-string(TOUPPER "${OS}" OS_UPPER)
-add_definitions(
-		-DUAVCAN_CPP_VERSION=UAVCAN_CPP03
-		-DUAVCAN_MEM_POOL_BLOCK_SIZE=48
-		-DUAVCAN_NO_ASSERTIONS
-		-DUAVCAN_PLATFORM=stm32
-		-DUAVCAN_STM32_${OS_UPPER}=1
-		-DUAVCAN_STM32_NUM_IFACES=${config_uavcan_num_ifaces}
-		-DUAVCAN_STM32_TIMER_NUMBER=5
-		)
-
-add_subdirectory(libuavcan EXCLUDE_FROM_ALL)
-add_dependencies(uavcan prebuild_targets)
+add_dependencies(libuavcan prebuild_targets)
 
 px4_add_module(
 	MODULE modules__uavcan
@@ -61,9 +85,9 @@ px4_add_module(
 	STACK_MAX 1500
 	INCLUDES
 		${PX4_SOURCE_DIR}/mavlink/include/mavlink
-		libuavcan/libuavcan/include
-		libuavcan/libuavcan/include/dsdlc_generated
-		libuavcan/libuavcan_drivers/posix/include
+		${PX4_BINARY_DIR}/libuavcan/include
+		${PX4_BINARY_DIR}/libuavcan/include/dsdlc_generated
+		#libuavcan/libuavcan_drivers/posix/include
 		libuavcan/libuavcan_drivers/stm32/driver/include
 	SRCS
 		# Main
@@ -88,4 +112,4 @@ px4_add_module(
 		uavcan_stm32_driver
 	)
 
-target_link_libraries(modules__uavcan uavcan uavcan_stm32_driver)
+target_link_libraries(modules__uavcan nuttx_cxx uavcan uavcan_stm32_driver nuttx_cxx)

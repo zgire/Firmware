@@ -54,7 +54,10 @@ target_link_libraries(${FW_NAME}
 	-Wl,--end-group
 
 	m
-	gcc
+	gcc	
+	)
+target_link_libraries(${FW_NAME}
+	nuttx_cxx
 	)
 
 if (config_romfs_root)

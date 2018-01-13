@@ -33,8 +33,6 @@
 
 #include <px4_tasks.h>
 
-#include <nuttx/config.h>
-
 #include <cstdlib>
 #include <cstring>
 #include <fcntl.h>
@@ -47,8 +45,6 @@
 #include <lib/mixer/mixer.h>
 #include <systemlib/board_serial.h>
 #include <version/version.h>
-#include <arch/board/board.h>
-#include <arch/chip/chip.h>
 
 #include "uavcan_main.hpp"
 #include "uavcan_servers.hpp"

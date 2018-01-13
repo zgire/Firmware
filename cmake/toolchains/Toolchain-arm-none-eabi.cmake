@@ -86,8 +86,8 @@ endif()
 set(c_flags "-fno-common -ffunction-sections -fdata-sections")
 set(cxx_flags "-fno-common -ffunction-sections -fdata-sections")
 
-set(CMAKE_C_FLAGS "${c_flags} ${cpu_flags}" CACHE INTERNAL "" FORCE)
-set(CMAKE_CXX_FLAGS "${cxx_flags} ${cpu_flags}" CACHE INTERNAL "" FORCE)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${c_flags} ${cpu_flags}" CACHE INTERNAL "" FORCE)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${cxx_flags} ${cpu_flags}" CACHE INTERNAL "" FORCE)
 set(CMAKE_ASM_FLAGS "${cpu_flags} -D__ASSEMBLY__ " CACHE INTERNAL "" FORCE)
 set(CMAKE_EXE_LINKER_FLAGS "${cpu_flags} -nodefaultlibs -nostdlib -Wl,--warn-common,--gc-sections" CACHE INTERNAL "" FORCE)
 

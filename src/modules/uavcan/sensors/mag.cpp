@@ -71,7 +71,7 @@ int UavcanMagnetometerBridge::init()
 	return 0;
 }
 
-ssize_t UavcanMagnetometerBridge::read(struct file *filp, char *buffer, size_t buflen)
+ssize_t UavcanMagnetometerBridge::read(device::file_t *filp, char *buffer, size_t buflen)
 {
 	static uint64_t last_read = 0;
 	struct mag_report *mag_buf = reinterpret_cast<struct mag_report *>(buffer);
@@ -97,7 +97,7 @@ ssize_t UavcanMagnetometerBridge::read(struct file *filp, char *buffer, size_t b
 	}
 }
 
-int UavcanMagnetometerBridge::ioctl(struct file *filp, int cmd, unsigned long arg)
+int UavcanMagnetometerBridge::ioctl(device::file_t *filp, int cmd, unsigned long arg)
 {
 	switch (cmd) {
 	case SENSORIOCSQUEUEDEPTH: {

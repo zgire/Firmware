@@ -35,8 +35,6 @@
 
 #pragma once
 
-#include <nuttx/config.h>
-
 #include <cstdlib>
 #include <cstdint>
 #include <cstring>

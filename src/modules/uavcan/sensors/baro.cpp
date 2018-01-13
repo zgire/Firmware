@@ -73,7 +73,7 @@ int UavcanBarometerBridge::init()
 	return 0;
 }
 
-ssize_t UavcanBarometerBridge::read(struct file *filp, char *buffer, size_t buflen)
+ssize_t UavcanBarometerBridge::read(device::file_t *filp, char *buffer, size_t buflen)
 {
 	unsigned count = buflen / sizeof(struct baro_report);
 	struct baro_report *baro_buf = reinterpret_cast<struct baro_report *>(buffer);
@@ -95,7 +95,7 @@ ssize_t UavcanBarometerBridge::read(struct file *filp, char *buffer, size_t bufl
 	return ret ? ret : -EAGAIN;
 }
 
-int UavcanBarometerBridge::ioctl(struct file *filp, int cmd, unsigned long arg)
+int UavcanBarometerBridge::ioctl(device::file_t *filp, int cmd, unsigned long arg)
 {
 	switch (cmd) {
 	case BAROIOCSMSLPRESSURE: {
