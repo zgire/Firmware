@@ -1,0 +1,16 @@
+[cmake]
+bears = CMakeLintBear
+files = CMakeLists.txt
+cmakelint_config = .cmakelintrc
+
+[clang]
+bears = ClangCloneDetectionBear,ClangComplexityBear
+files = src/**/*.cpp
+
+# [python]
+# bears = PEP8Bear
+# files = src/**/*.py
+
+# [bash]
+# bears = ShellCheckBear
+# files = Tools/*.sh
