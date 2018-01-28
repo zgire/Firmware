@@ -107,29 +107,35 @@ private:
 	// Subscriptions
 	Subscription<mission_result_s> _mission_result_sub;
 
-	bool handle_command(vehicle_status_s *status, const safety_s *safety, vehicle_command_s *cmd,
-			    actuator_armed_s *armed, home_position_s *home, vehicle_global_position_s *global_pos,
-			    vehicle_local_position_s *local_pos, vehicle_attitude_s *attitude, orb_advert_t *home_pub,
+	bool handle_command(vehicle_status_s *status_local, const safety_s &safety_local,
+			    const vehicle_command_s &cmd, actuator_armed_s *armed_local,
+			    home_position_s *home, const vehicle_global_position_s &global_pos,
+			    const vehicle_local_position_s &local_pos, const vehicle_attitude_s &attitude, orb_advert_t *home_pub,
 			    orb_advert_t *command_ack_pub, bool *changed);
 
 	bool set_home_position(orb_advert_t &homePub, home_position_s &home,
-				const vehicle_local_position_s &localPosition, const vehicle_global_position_s &globalPosition,
-				const vehicle_attitude_s &attitude, bool set_alt_only_to_lpos_ref);
+			       const vehicle_local_position_s &localPosition, const vehicle_global_position_s &globalPosition,
+			       const vehicle_attitude_s &attitude, bool set_alt_only_to_lpos_ref);
 
 	// Set the main system state based on RC and override device inputs
-	transition_result_t set_main_state(struct vehicle_status_s *status, vehicle_global_position_s *global_position, vehicle_local_position_s *local_position, bool *changed);
+	transition_result_t set_main_state(const vehicle_status_s &status, const vehicle_global_position_s &global_position,
+					   const vehicle_local_position_s &local_position, bool *changed);
 
 	// Enable override (manual reversion mode) on the system
-	transition_result_t set_main_state_override_on(struct vehicle_status_s *status_local, bool *changed);
+	transition_result_t set_main_state_override_on(const vehicle_status_s &status_local, bool *changed);
 
 	// Set the system main state based on the current RC inputs
-	transition_result_t set_main_state_rc(struct vehicle_status_s *status, vehicle_global_position_s *global_position, vehicle_local_position_s *local_position, bool *changed);
+	transition_result_t set_main_state_rc(const vehicle_status_s &status_local,
+					      const vehicle_global_position_s &global_position, const vehicle_local_position_s &local_position, bool *changed);
 
-	void check_valid(hrt_abstime timestamp, hrt_abstime timeout, bool valid_in, bool *valid_out, bool *changed);
+	void check_valid(const hrt_abstime &timestamp, const hrt_abstime &timeout, const bool valid_in, bool *valid_out,
+			 bool *changed);
 
-	bool check_posvel_validity(const bool data_valid, const float data_accuracy, const float required_accuracy, const hrt_abstime& data_timestamp_us, hrt_abstime *last_fail_time_us, hrt_abstime *probation_time_us, bool *valid_state, bool *validity_changed);
-
-	void reset_posvel_validity(vehicle_global_position_s *global_position, vehicle_local_position_s *local_position, bool *changed);
+	bool check_posvel_validity(const bool data_valid, const float data_accuracy, const float required_accuracy,
+				   const hrt_abstime &data_timestamp_us, hrt_abstime *last_fail_time_us, hrt_abstime *probation_time_us, bool *valid_state,
+				   bool *validity_changed);
+	void reset_posvel_validity(const vehicle_global_position_s &global_position,
+				   const vehicle_local_position_s &local_position, bool *changed);
 
 	void mission_init();
 

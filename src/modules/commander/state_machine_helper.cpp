@@ -394,8 +394,7 @@ bool is_safe(const struct safety_s *safety, const struct actuator_armed_s *armed
 }
 
 transition_result_t
-main_state_transition(struct vehicle_status_s *status, main_state_t new_main_state, uint8_t &main_state_prev,
-		      vehicle_status_flags_s *status_flags, struct commander_state_s *internal_state)
+main_state_transition(const vehicle_status_s& status, main_state_t new_main_state, uint8_t &main_state_prev, vehicle_status_flags_s *status_flags, struct commander_state_s *internal_state)
 {
 	// IMPORTANT: The assumption of callers of this function is that the execution of
 	// this check if essentially "free". Therefore any runtime checking in here has to be
@@ -445,7 +444,7 @@ main_state_transition(struct vehicle_status_s *status, main_state_t new_main_sta
 	case commander_state_s::MAIN_STATE_AUTO_FOLLOW_TARGET:
 
 		/* FOLLOW only implemented in MC */
-		if (status->is_rotary_wing) {
+		if (status.is_rotary_wing) {
 			ret = TRANSITION_CHANGED;
 		}
 
@@ -484,7 +483,7 @@ main_state_transition(struct vehicle_status_s *status, main_state_t new_main_sta
 	case commander_state_s::MAIN_STATE_AUTO_PRECLAND:
 
 		/* need local and global position, and precision land only implemented for multicopters */
-		if (status_flags->condition_local_position_valid && status_flags->condition_global_position_valid && status->is_rotary_wing) {
+		if (status_flags->condition_local_position_valid && status_flags->condition_global_position_valid && status.is_rotary_wing) {
 			ret = TRANSITION_CHANGED;
 		}
 
@@ -1077,7 +1076,7 @@ void set_link_loss_nav_state(vehicle_status_s *status,
 		   && status_flags->condition_global_position_valid && status_flags->condition_home_position_valid) {
 
 		uint8_t main_state_prev = 0;
-		main_state_transition(status, commander_state_s::MAIN_STATE_AUTO_RTL, main_state_prev, status_flags, internal_state);
+		main_state_transition(*status, commander_state_s::MAIN_STATE_AUTO_RTL, main_state_prev, status_flags, internal_state);
 		status->nav_state = vehicle_status_s::NAVIGATION_STATE_AUTO_RTL;
 
 	} else if (link_loss_act == link_loss_actions_t::AUTO_LAND && status_flags->condition_local_position_valid) {
