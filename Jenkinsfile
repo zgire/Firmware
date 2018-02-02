@@ -338,6 +338,7 @@ pipeline {
             sh 'make posix_sitl_default'
             sh 'make posix_sitl_default sitl_gazebo'
             sh './test/rostest_px4_run.sh mavros_posix_test_mission.test mission:=vtol_new_1.txt vehicle:=standard_vtol'
+            sh './Tools/ecl_ekf/process_logdata_ekf.py `find . -name *.ulg -print -quit`'
           }
           post {
             success {
@@ -352,6 +353,7 @@ pipeline {
                         done
                 '''
               archiveArtifacts '**/*.ulg'
+              archiveArtifacts '**/*.pdf'
               archiveArtifacts '.ros/*/px4/**.xml'
               archiveArtifacts '.ros/log/**.log'
             }
@@ -371,6 +373,7 @@ pipeline {
             sh 'make posix_sitl_default'
             sh 'make posix_sitl_default sitl_gazebo'
             sh './test/rostest_px4_run.sh mavros_posix_test_mission.test mission:=vtol_new_2.txt vehicle:=standard_vtol'
+            sh './Tools/ecl_ekf/process_logdata_ekf.py `find . -name *.ulg -print -quit`'
           }
           post {
             success {
@@ -385,6 +388,7 @@ pipeline {
                         done
                 '''
               archiveArtifacts '**/*.ulg'
+              archiveArtifacts '**/*.pdf'
               archiveArtifacts '.ros/*/px4/**.xml'
               archiveArtifacts '.ros/log/**.log'
             }
@@ -404,6 +408,7 @@ pipeline {
             sh 'make posix_sitl_default'
             sh 'make posix_sitl_default sitl_gazebo'
             sh './test/rostest_px4_run.sh mavros_posix_test_mission.test mission:=vtol_old_1.txt vehicle:=standard_vtol'
+            sh './Tools/ecl_ekf/process_logdata_ekf.py `find . -name *.ulg -print -quit`'
           }
           post {
             success {
@@ -418,6 +423,7 @@ pipeline {
                         done
                 '''
               archiveArtifacts '**/*.ulg'
+              archiveArtifacts '**/*.pdf'
               archiveArtifacts '.ros/*/px4/**.xml'
               archiveArtifacts '.ros/log/**.log'
             }
@@ -437,6 +443,7 @@ pipeline {
             sh 'make posix_sitl_default'
             sh 'make posix_sitl_default sitl_gazebo'
             sh './test/rostest_px4_run.sh mavros_posix_test_mission.test mission:=vtol_old_2.txt vehicle:=standard_vtol'
+            sh './Tools/ecl_ekf/process_logdata_ekf.py `find . -name *.ulg -print -quit`'
           }
           post {
             success {
@@ -451,6 +458,7 @@ pipeline {
                         done
                 '''
               archiveArtifacts '**/*.ulg'
+              archiveArtifacts '**/*.pdf'
               archiveArtifacts '.ros/*/px4/**.xml'
               archiveArtifacts '.ros/log/**.log'
             }
@@ -470,6 +478,7 @@ pipeline {
             sh 'make posix_sitl_default'
             sh 'make posix_sitl_default sitl_gazebo'
             sh './test/rostest_px4_run.sh mavros_posix_test_mission.test mission:=vtol_old_3.txt vehicle:=standard_vtol'
+            sh './Tools/ecl_ekf/process_logdata_ekf.py `find . -name *.ulg -print -quit`'
           }
           post {
             success {
@@ -484,6 +493,7 @@ pipeline {
                         done
                 '''
               archiveArtifacts '**/*.ulg'
+              archiveArtifacts '**/*.pdf'
               archiveArtifacts '.ros/*/px4/**.xml'
               archiveArtifacts '.ros/log/**.log'
             }
@@ -503,6 +513,7 @@ pipeline {
             sh 'make posix_sitl_default'
             sh 'make posix_sitl_default sitl_gazebo'
             sh './test/rostest_px4_run.sh mavros_posix_test_mission.test mission:=multirotor_box.mission vehicle:=iris'
+            sh './Tools/ecl_ekf/process_logdata_ekf.py `find . -name *.ulg -print -quit`'
           }
           post {
             success {
@@ -517,6 +528,7 @@ pipeline {
                         done
                 '''
               archiveArtifacts '**/*.ulg'
+              archiveArtifacts '**/*.pdf'
               archiveArtifacts '.ros/*/px4/**.xml'
               archiveArtifacts '.ros/log/**.log'
             }
@@ -536,6 +548,7 @@ pipeline {
             sh 'make posix_sitl_default'
             sh 'make posix_sitl_default sitl_gazebo'
             sh './test/rostest_px4_run.sh mavros_posix_tests_offboard_attctl.test'
+            sh './Tools/ecl_ekf/process_logdata_ekf.py `find . -name *.ulg -print -quit`'
           }
           post {
             success {
@@ -544,6 +557,7 @@ pipeline {
             failure {
               sh './Tools/upload_log.py -q --description "ROS offboard attitude test: ${CHANGE_ID}" --feedback "${CHANGE_TITLE} - ${CHANGE_URL}" --source CI --email "${CHANGE_AUTHOR_EMAIL}" .ros/rootfs/fs/microsd/log/*/*.ulg'
               archiveArtifacts '**/*.ulg'
+              archiveArtifacts '**/*.pdf'
               archiveArtifacts '.ros/*/px4/**.xml'
               archiveArtifacts '.ros/log/**.log'
             }
@@ -563,6 +577,7 @@ pipeline {
             sh 'make posix_sitl_default'
             sh 'make posix_sitl_default sitl_gazebo'
             sh './test/rostest_px4_run.sh mavros_posix_tests_offboard_posctl.test'
+            sh './Tools/ecl_ekf/process_logdata_ekf.py `find . -name *.ulg -print -quit`'
           }
           post {
             success {
@@ -571,6 +586,7 @@ pipeline {
             failure {
               sh './Tools/upload_log.py -q --description "ROS offboard position test: ${CHANGE_ID}" --feedback "${CHANGE_TITLE} - ${CHANGE_URL}" --source CI --email "${CHANGE_AUTHOR_EMAIL}" .ros/rootfs/fs/microsd/log/*/*.ulg'
               archiveArtifacts '**/*.ulg'
+              archiveArtifacts '**/*.pdf'
               archiveArtifacts '.ros/*/px4/**.xml'
               archiveArtifacts '.ros/log/**.log'
             }
