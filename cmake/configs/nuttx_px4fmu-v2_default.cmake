@@ -7,8 +7,9 @@ set(config_module_list
 	# Board support modules
 	#
 	#drivers/barometer
+	#drivers/distance_sensors
 	drivers/differential_pressure
-	#drivers/magnetometer
+	drivers/magnetometer
 	#drivers/telemetry
 
 	#drivers/imu/adis16448
@@ -29,8 +30,6 @@ set(config_module_list
 	drivers/imu/l3gd20
 	drivers/led
 	drivers/imu/lsm303d
-	drivers/magnetometer/hmc5883
-	drivers/magnetometer/lis3mdl
 	#drivers/mb12xx
 	#drivers/mkblctrl
 	drivers/imu/mpu6000
@@ -49,16 +48,6 @@ set(config_module_list
 	#drivers/tap_esc
 	drivers/vmount
 
-	# distance sensors
-	drivers/distance_sensor/ll40ls
-	drivers/distance_sensor/mb12xx
-	drivers/distance_sensor/sf0x
-	drivers/distance_sensor/sf1xx
-	drivers/distance_sensor/srf02
-	drivers/distance_sensor/srf02_i2c
-	drivers/distance_sensor/teraranger
-	drivers/distance_sensor/tfmini
-	drivers/distance_sensor/ulanding
 	modules/sensors
 
 	#
