@@ -70,7 +70,7 @@ private:
 		float airspeed_trans;			/**< airspeed at which we switch to fw mode after transition */
 		float airspeed_blend_start;		/**< airspeed at which we start blending mc/fw controls */
 		float front_trans_dur_p2;
-		int32_t fw_motors_off;			/**< bitmask of all motors that should be off in fixed wing mode */
+		uint32_t fw_motors_off;			/**< bitmask of all motors that should be off in fixed wing mode */
 		int32_t airspeed_disabled;
 		int32_t diff_thrust;
 		float diff_thrust_scale;
@@ -123,7 +123,7 @@ private:
 	/**
 	 * Return a bitmap of channels that should be turned off in fixed wing mode.
 	 */
-	int get_motor_off_channels(const int channels);
+	uint32_t get_motor_off_channels(const int channels);
 
 	/**
 	 * Return true if the motor channel is off in fixed wing mode.
